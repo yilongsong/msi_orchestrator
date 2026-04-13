@@ -186,6 +186,8 @@ export PYTHONNOUSERSITE=1
 unset LD_PRELOAD
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
+umask 0002
+
 """
 
     if not resume:

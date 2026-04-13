@@ -31,6 +31,8 @@ export PYTHONNOUSERSITE=1
 unset LD_PRELOAD
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
 
+umask 0002
+
 # Execute the infinite loop
 # Because sbatch jobs automatically run in the background tied to the cluster,
 # you will never have to worry about a tmux session disconnecting!

@@ -63,7 +63,7 @@ def main(stdscr):
         stdscr.addstr(0, 0, header[:w])
         stdscr.attroff(curses.A_BOLD)
         
-        info = " [UP/DOWN] Navigate | [SPACE] Status | [O] Owner | [W/S] Move | [ENTER/Q] Save "
+        info = " [UP/DOWN] Nav | [SPACE] Status | [O] Owner | [W/S] Move | [N] Restart | [ENTER] Save "
         stdscr.addstr(1, 0, info.center(w)[:w])
         stdscr.addstr(2, 0, "-" * w)
 
@@ -149,6 +149,12 @@ def main(stdscr):
                     v['owner'] = OWNER_OPTIONS[next_idx]
                 else:
                     v['owner'] = OWNER_OPTIONS[0]
+        elif key in [ord('n'), ord('N')]:
+            k, v = items[selected_idx]
+            if isinstance(v, dict):
+                v['job_id'] = None
+                # Set status to active so orchestrator picks it up
+                v['status'] = 'active'
         elif key in [ord('w'), ord('W')]:
             if isinstance(items[selected_idx][1], str) and ("TASKS" in items[selected_idx][1] or "series" in items[selected_idx][1]):
                 drag_start, drag_end = get_block_bounds(items, selected_idx)

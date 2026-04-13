@@ -12,6 +12,8 @@
 SLEEP_DURATION=3600
 POLL_INTERVAL=10
 
+umask 0002
+
 # Ensure logs directory exists
 mkdir -p logs
 
