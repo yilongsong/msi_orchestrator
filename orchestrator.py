@@ -3,7 +3,13 @@ import os
 import subprocess
 import time
 import glob
+import shutil
 from datetime import datetime
+
+try:
+    from safetensors import safe_open
+except ImportError:
+    safe_open = None
 
 CONFIG_FILE = "experiments.json"
 SBATCH_DIR = "sbatch_scripts"
@@ -334,18 +340,54 @@ def orchestrate():
             output_dir = f"/projects/standard/ztchen/shared/yilong/outputs/{exp_name}"
             checkpoints_dir = os.path.join(output_dir, "checkpoints")
             
-            # Self-Healing: Repair broken 'last' symlinks if valid checkpoints physically exist!
+            # Deep Tensor Self-Healing: Dynamically rollback if hardware corruption exists.
             valid_checkpoint_found = False
             if os.path.exists(checkpoints_dir):
                 highest_step = -1
                 latest_ckpt_name = None
-                for subdir in os.listdir(checkpoints_dir):
-                    if subdir.isdigit():
-                        step_val = int(subdir)
-                        # Ensure the safetensors file actually successfully serialized
-                        if step_val > highest_step and os.path.exists(os.path.join(checkpoints_dir, subdir, "pretrained_model", "model.safetensors")):
-                            highest_step = step_val
-                            latest_ckpt_name = subdir
+                
+                # Sort numerically descending to naturally fall-back downwards
+                subdirs = [d for d in os.listdir(checkpoints_dir) if d.isdigit()]
+                subdirs.sort(key=int, reverse=True)
+                
+                for subdir in subdirs:
+                    step_val = int(subdir)
+                    checkpoint_target = os.path.join(checkpoints_dir, subdir)
+                    
+                    # Ensure both critical serialization matrices natively hit disk
+                    model_path = os.path.join(checkpoint_target, "pretrained_model", "model.safetensors")
+                    optimizer_path = os.path.join(checkpoint_target, "training_state", "optimizer_state.safetensors")
+                    
+                    if os.path.exists(model_path) and os.path.exists(optimizer_path):
+                        is_valid = True
+                        if safe_open:
+                            try:
+                                # Structurally crack open the binary headers
+                                with safe_open(model_path, framework="pt"):
+                                    pass
+                                with safe_open(optimizer_path, framework="pt"):
+                                    pass
+                            except Exception as e:
+                                print(f"[{exp_name}] WARNING: Checkpoint {subdir} has mathematically corrupted .safetensors headers. Purging...")
+                                is_valid = False
+                                
+                        if not is_valid:
+                            try:
+                                shutil.rmtree(checkpoint_target)
+                            except:
+                                pass
+                            continue # Ignore this folder and cleanly roll backwards to the next loop check!
+                            
+                        # If we reached here, the checkpoint is mathematically intact!
+                        highest_step = step_val
+                        latest_ckpt_name = subdir
+                        break
+                    else:
+                        print(f"[{exp_name}] WARNING: Checkpoint {subdir} did not successfully serialize out natively. Purging...")
+                        try:
+                            shutil.rmtree(checkpoint_target)
+                        except:
+                            pass
                             
                 if latest_ckpt_name:
                     last_link = os.path.join(checkpoints_dir, "last")
