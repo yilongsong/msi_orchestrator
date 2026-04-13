@@ -2,6 +2,8 @@ import json
 import os
 import subprocess
 import time
+import glob
+from datetime import datetime
 
 CONFIG_FILE = "experiments.json"
 SBATCH_DIR = "sbatch_scripts"
@@ -37,12 +39,19 @@ def get_running_jobs():
         print(f"Error calling squeue: {e}")
         return running
 
+def find_log_file(job_id, exp_name):
+    pattern = os.path.join(LOGS_DIR, "**", f"{job_id}_{exp_name}.err")
+    matches = glob.glob(pattern, recursive=True)
+    if matches:
+        return matches[0]
+    return os.path.join(LOGS_DIR, f"{job_id}_{exp_name}.err")
+
 def did_job_timeout(job_id, exp_name):
     """
     Checks the error log for a given job to see if it was cancelled
     due to a time limit (SLURM 24hr cancellation limit).
     """
-    err_log = os.path.join(LOGS_DIR, f"{job_id}_{exp_name}.err")
+    err_log = find_log_file(job_id, exp_name)
     if not os.path.exists(err_log):
         print(f"WARNING: Log file {err_log} not found.")
         return False
@@ -62,7 +71,7 @@ def check_if_reached_1m(job_id, exp_name):
     """
     Checks the log to see if the job exit gracefully or reached 1000000 steps.
     """
-    err_log = os.path.join(LOGS_DIR, f"{job_id}_{exp_name}.err")
+    err_log = find_log_file(job_id, exp_name)
     if not os.path.exists(err_log):
         return False
         
@@ -129,7 +138,10 @@ def get_epochs_for_run(exp_name, dataset_repo):
 def create_and_submit_sbatch(exp_name, config_data, resume=False):
     """Creates an sbatch script and submits it, returning the newly assigned job ID."""
     os.makedirs(SBATCH_DIR, exist_ok=True)
-    os.makedirs(LOGS_DIR, exist_ok=True)
+    
+    date_str = datetime.now().strftime("%Y-%m-%d")
+    current_logs_dir = os.path.join(LOGS_DIR, date_str)
+    os.makedirs(current_logs_dir, exist_ok=True)
     
     sbatch_file = os.path.join(SBATCH_DIR, f"{exp_name}.sbatch")
     
@@ -145,12 +157,12 @@ def create_and_submit_sbatch(exp_name, config_data, resume=False):
 #SBATCH --gres=gpu:a100:1
 #SBATCH --time=24:00:00
 #SBATCH --partition=msigpu
-#SBATCH --output={LOGS_DIR}/%j_%x.out
-#SBATCH --error={LOGS_DIR}/%j_%x.err
+#SBATCH --output={current_logs_dir}/%j_%x.out
+#SBATCH --error={current_logs_dir}/%j_%x.err
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user={USER}@umn.edu
 
-mkdir -p {LOGS_DIR}
+mkdir -p {current_logs_dir}
 
 module purge
 module load ffmpeg

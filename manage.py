@@ -7,6 +7,25 @@ CONFIG_FILE = os.path.join(SCRIPT_DIR, "experiments.json")
 STATUS_OPTIONS = ["active", "pending", "inactive", "finished"]
 OWNER_OPTIONS = ["song0837", "chand863"]
 
+def get_block_bounds(items, idx):
+    if isinstance(items[idx][1], str) and "TASKS" in items[idx][1]:
+        start = idx
+        end = idx
+        while end + 1 < len(items):
+            nxt = items[end + 1]
+            if isinstance(nxt[1], str) and "TASKS" in nxt[1]: break
+            if isinstance(nxt[1], bool): break
+            end += 1
+        return start, end
+    elif isinstance(items[idx][1], str) and "series" in items[idx][1]:
+        start = idx
+        end = idx
+        while end + 1 < len(items) and isinstance(items[end + 1][1], dict):
+            end += 1
+        return start, end
+    else:
+        return idx, idx
+
 def main(stdscr):
     curses.curs_set(0) # Hide cursor
     stdscr.nodelay(False) # Blocking getch
@@ -131,51 +150,38 @@ def main(stdscr):
                 else:
                     v['owner'] = OWNER_OPTIONS[0]
         elif key in [ord('w'), ord('W')]:
-            start_idx = selected_idx
-            is_comment = isinstance(items[selected_idx][1], str) and items[selected_idx][0].startswith('_COMMENT')
-            
-            end_idx = start_idx
-            if is_comment:
-                while end_idx + 1 < len(items) and isinstance(items[end_idx + 1][1], dict):
-                    end_idx += 1
-                    
-            if start_idx > 0:
-                if is_comment:
-                    prev_end = start_idx - 1
-                    prev_start = prev_end
-                    if isinstance(items[prev_end][1], dict):
+            if isinstance(items[selected_idx][1], str) and ("TASKS" in items[selected_idx][1] or "series" in items[selected_idx][1]):
+                drag_start, drag_end = get_block_bounds(items, selected_idx)
+                if drag_start > 0:
+                    prev_start = drag_start - 1
+                    if isinstance(items[prev_start][1], dict):
                         while prev_start > 0 and isinstance(items[prev_start - 1][1], dict):
                             prev_start -= 1
-                        if prev_start > 0 and isinstance(items[prev_start - 1][1], str) and items[prev_start - 1][0].startswith('_COMMENT'):
+                        if prev_start > 0 and isinstance(items[prev_start - 1][1], str) and "series" in items[prev_start - 1][1]:
                             prev_start -= 1
-                    items[prev_start : end_idx + 1] = items[start_idx : end_idx + 1] + items[prev_start : start_idx]
+                    if "TASKS" in str(items[drag_start][1]):
+                        while prev_start > 0:
+                            if isinstance(items[prev_start - 1][1], str) and "TASKS" in str(items[prev_start - 1][1]):
+                                prev_start -= 1
+                                break
+                            if isinstance(items[prev_start - 1][1], bool): break
+                            prev_start -= 1
+                    items[prev_start : drag_end + 1] = items[drag_start : drag_end + 1] + items[prev_start : drag_start]
                     selected_idx = prev_start
-                else:
+            else:
+                if selected_idx > 0:
                     items[selected_idx], items[selected_idx-1] = items[selected_idx-1], items[selected_idx]
                     selected_idx -= 1
                     
         elif key in [ord('s'), ord('S')]:
-            start_idx = selected_idx
-            is_comment = isinstance(items[selected_idx][1], str) and items[selected_idx][0].startswith('_COMMENT')
-            
-            end_idx = start_idx
-            if is_comment:
-                while end_idx + 1 < len(items) and isinstance(items[end_idx + 1][1], dict):
-                    end_idx += 1
-                    
-            if end_idx < len(items) - 1:
-                if is_comment:
-                    next_start = end_idx + 1
-                    next_end = next_start
-                    if isinstance(items[next_start][1], str) and items[next_start][0].startswith('_COMMENT'):
-                        while next_end + 1 < len(items) and isinstance(items[next_end + 1][1], dict):
-                            next_end += 1
-                    elif isinstance(items[next_start][1], dict):
-                        while next_end + 1 < len(items) and isinstance(items[next_end + 1][1], dict):
-                            next_end += 1
-                    items[start_idx : next_end + 1] = items[next_start : next_end + 1] + items[start_idx : end_idx + 1]
-                    selected_idx = start_idx + (next_end - next_start + 1)
-                else:
+            if isinstance(items[selected_idx][1], str) and ("TASKS" in items[selected_idx][1] or "series" in items[selected_idx][1]):
+                drag_start, drag_end = get_block_bounds(items, selected_idx)
+                if drag_end < len(items) - 1:
+                    over_start, over_end = get_block_bounds(items, drag_end + 1)
+                    items[drag_start : over_end + 1] = items[over_start : over_end + 1] + items[drag_start : drag_end + 1]
+                    selected_idx = drag_start + (over_end - over_start + 1)
+            else:
+                if selected_idx < len(items) - 1:
                     items[selected_idx], items[selected_idx+1] = items[selected_idx+1], items[selected_idx]
                     selected_idx += 1
         elif key in [ord('q'), ord('Q'), 10, 13]:
