@@ -19,7 +19,11 @@ echo "Deploying the Master Orchestrator onto SLURM..."
 module purge
 module unload python 2>/dev/null || true
 
-source /users/7/$USER/miniconda3/etc/profile.d/conda.sh
+if [ -f "/users/7/$USER/miniconda3/etc/profile.d/conda.sh" ]; then
+    source /users/7/$USER/miniconda3/etc/profile.d/conda.sh
+else
+    module load conda
+fi
 conda activate /projects/standard/ztchen/shared/yilong/conda_envs/lerobot-shared
 
 export PATH="/users/7/$USER/.local/bin:$PATH"

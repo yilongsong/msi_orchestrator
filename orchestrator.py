@@ -168,7 +168,11 @@ module purge
 module load ffmpeg
 module unload python 2>/dev/null || true
 
-source /users/7/{USER}/miniconda3/etc/profile.d/conda.sh
+if [ -f "/users/7/{USER}/miniconda3/etc/profile.d/conda.sh" ]; then
+    source /users/7/{USER}/miniconda3/etc/profile.d/conda.sh
+else
+    module load conda
+fi
 conda activate /projects/standard/ztchen/shared/yilong/conda_envs/lerobot-shared
 
 export PATH="/users/7/{USER}/.local/bin:$PATH"
@@ -328,12 +332,39 @@ def orchestrate():
         # Case 2: Job has no ID yet (Freshly added configuration)
         if not last_job_id:
             output_dir = f"/projects/standard/ztchen/shared/yilong/outputs/{exp_name}"
-            checkpoint_path = os.path.join(output_dir, "checkpoints", "last", "pretrained_model")
+            checkpoints_dir = os.path.join(output_dir, "checkpoints")
             
-            if os.path.exists(checkpoint_path):
+            # Self-Healing: Repair broken 'last' symlinks if valid checkpoints physically exist!
+            valid_checkpoint_found = False
+            if os.path.exists(checkpoints_dir):
+                highest_step = -1
+                latest_ckpt_name = None
+                for subdir in os.listdir(checkpoints_dir):
+                    if subdir.isdigit():
+                        step_val = int(subdir)
+                        # Ensure the safetensors file actually successfully serialized
+                        if step_val > highest_step and os.path.exists(os.path.join(checkpoints_dir, subdir, "pretrained_model", "model.safetensors")):
+                            highest_step = step_val
+                            latest_ckpt_name = subdir
+                            
+                if latest_ckpt_name:
+                    last_link = os.path.join(checkpoints_dir, "last")
+                    if os.path.islink(last_link) or os.path.exists(last_link):
+                        os.remove(last_link)
+                    os.symlink(latest_ckpt_name, last_link)
+                    valid_checkpoint_found = True
+            
+            if valid_checkpoint_found:
                 print(f"[{exp_name}] Found existing checkpoint for new configuration. Submitting resume job.")
                 new_job_id = create_and_submit_sbatch(exp_name, exp_data, resume=True)
             else:
+                # LeRobot strictly refuses to initialize (resume=False) if the output folder exists. 
+                # If we legitimately have NO valid checkpoints, it's a corrupted launch remnant and must be safely purged!
+                if os.path.exists(output_dir):
+                    print(f"[{exp_name}] Corrupted empty output folder exists. Wiping for fresh init!")
+                    import shutil
+                    shutil.rmtree(output_dir)
+                
                 print(f"[{exp_name}] Found new active configuration. Generating initial job.")
                 new_job_id = create_and_submit_sbatch(exp_name, exp_data, resume=False)
                 
