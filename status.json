@@ -1,0 +1,163 @@
+{
+  "pour_e15": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "13:37:06",
+    "slurm_node": "aga14",
+    "epochs": 229.53,
+    "target": 500
+  },
+  "pour_e30": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "13:37:06",
+    "slurm_node": "aga14",
+    "epochs": 317.66,
+    "target": 500
+  },
+  "pour_e50": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "13:37:06",
+    "slurm_node": "aga32",
+    "epochs": 231.58,
+    "target": 500
+  },
+  "pour_e70": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 354.55,
+    "target": 500
+  },
+  "pour_e100": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 0,
+    "target": 500
+  },
+  "pour_c15_k1": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 502.09,
+    "target": 500
+  },
+  "pour_c20_k1": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "13:21:46",
+    "slurm_node": "aga02",
+    "epochs": 409.31,
+    "target": 500
+  },
+  "pour_c30_k1": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1031.47,
+    "target": 500
+  },
+  "pour_c45_k1": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 622.15,
+    "target": 500
+  },
+  "pour_c15_k2": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 302.7,
+    "target": 500
+  },
+  "pour_c15_k5": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 294.3,
+    "target": 500
+  },
+  "pour_c20_k2": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 27.03,
+    "target": 500
+  },
+  "pour_c20_k5": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 26.28,
+    "target": 500
+  },
+  "pour_c30_k2": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 21.62,
+    "target": 500
+  },
+  "pour_c30_k5": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 21.02,
+    "target": 500
+  },
+  "pour_c45_k2": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 21.62,
+    "target": 500
+  },
+  "pour_c45_k5": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 5.26,
+    "target": 500
+  },
+  "sorting_e50": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "13:10:19",
+    "slurm_node": "aga06",
+    "epochs": 486.59,
+    "target": 500
+  },
+  "sorting_e25": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 367.43,
+    "target": 500
+  },
+  "insertion_e100": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "12:07:32",
+    "slurm_node": "aga14",
+    "epochs": 53.91,
+    "target": 1500
+  },
+  "insertion_e150": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "9:37:51",
+    "slurm_node": "aga32",
+    "epochs": 43.12,
+    "target": 1500
+  },
+  "insertion_e200": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "9:16:07",
+    "slurm_node": "aga02",
+    "epochs": 35.94,
+    "target": 1500
+  },
+  "insertion_e250": {
+    "slurm_state": "RUNNING",
+    "slurm_time": "9:14:15",
+    "slurm_node": "aga02",
+    "epochs": 35.94,
+    "target": 1500
+  }
+}

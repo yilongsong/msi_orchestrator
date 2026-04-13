@@ -1,6 +1,34 @@
 import curses
 import json
 import os
+import threading
+import time
+
+try:
+    from orchestrator import generate_telemetry
+except ImportError:
+    generate_telemetry = None
+
+telemetry_data = {}
+app_running = True
+
+def telemetry_worker():
+    global telemetry_data
+    while app_running:
+        if generate_telemetry:
+            try: generate_telemetry()
+            except Exception: pass
+        try:
+            with open("status.json", "r") as f:
+                telemetry_data = json.load(f)
+        except Exception:
+            pass
+        
+        # Sleep for 5 seconds roughly, but break early if app_running flips
+        for _ in range(50):
+            if not app_running: break
+            time.sleep(0.1)
+
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE = os.path.join(SCRIPT_DIR, "experiments.json")
@@ -27,8 +55,12 @@ def get_block_bounds(items, idx):
         return idx, idx
 
 def main(stdscr):
+    global app_running
     curses.curs_set(0) # Hide cursor
-    stdscr.nodelay(False) # Blocking getch
+    stdscr.timeout(1000) # Enable auto-redraw polling every 1 second
+    
+    t = threading.Thread(target=telemetry_worker, daemon=True)
+    t.start()
     
     # Setup colors using default terminal backgrounds so it looks native
     curses.start_color()
@@ -63,7 +95,7 @@ def main(stdscr):
         stdscr.addstr(0, 0, header[:w])
         stdscr.attroff(curses.A_BOLD)
         
-        info = " [UP/DOWN] Nav | [SPACE] Status | [O] Owner | [W/S] Move | [N] Restart | [ENTER] Save "
+        info = " [UP/DOWN] Nav | [SPACE] State | [+/-] Target | [W/S] Move | [P] Pause | [N] Rstrt | [ENTER] Save "
         stdscr.addstr(1, 0, info.center(w)[:w])
         stdscr.addstr(2, 0, "-" * w)
 
@@ -87,7 +119,18 @@ def main(stdscr):
                 st = v.get('status', 'inactive')
                 owner = v.get('owner', 'None')
                 target = v.get('target', 500)
-                display_str = f" [{st.upper():^8}] {k:<25} (Owner: {owner:<10} | Target: {target})"
+                display_str = f" [{st.upper():^8}] {k:<20} (Owner: {owner:<10} | Target: {target})"
+                
+                tel = telemetry_data.get(k)
+                if tel:
+                    st_flag = tel.get("slurm_state", "NONE")
+                    ep = tel.get("epochs", 0)
+                    rtime = tel.get("slurm_time", "")
+                    node = tel.get("slurm_node", "")
+                    metrics = f" | {st_flag:^8} [{ep} / {target} E]"
+                    if rtime or node:
+                        metrics += f" :: {rtime} on {node}"
+                    display_str += metrics
                 
                 # Semantic coloring
                 color = curses.color_pair(0)
@@ -155,6 +198,18 @@ def main(stdscr):
                 v['job_id'] = None
                 # Set status to active so orchestrator picks it up
                 v['status'] = 'active'
+        elif key in [ord('p'), ord('P')]:
+            k, v = items[selected_idx]
+            if isinstance(v, dict):
+                v['status'] = 'inactive'
+        elif key in [ord('+'), ord('=')]:
+            k, v = items[selected_idx]
+            if isinstance(v, dict):
+                v['target'] = v.get('target', 500) + 100
+        elif key in [ord('-'), ord('_')]:
+            k, v = items[selected_idx]
+            if isinstance(v, dict):
+                v['target'] = max(100, v.get('target', 500) - 100)
         elif key in [ord('w'), ord('W')]:
             if isinstance(items[selected_idx][1], str) and ("TASKS" in items[selected_idx][1] or "series" in items[selected_idx][1]):
                 drag_start, drag_end = get_block_bounds(items, selected_idx)
@@ -204,6 +259,9 @@ def main(stdscr):
 
     with open(CONFIG_FILE, 'w') as f:
         json.dump(new_dict, f, indent=2)
+
+    global app_running
+    app_running = False
 
 if __name__ == "__main__":
     os.environ.setdefault('ESCDELAY', '25')

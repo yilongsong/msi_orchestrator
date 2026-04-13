@@ -140,6 +140,54 @@ def get_epochs_for_run(exp_name, dataset_repo):
         
     return (highest_step * batch_size) / total_frames, highest_step
 
+def get_cluster_states():
+    """Returns a dictionary mapping exp_name to dict of Slurm info."""
+    states = {}
+    try:
+        result = subprocess.run(
+            ["squeue", "-h", "-o", "%i %250j %T %M %N"], 
+            capture_output=True, text=True, check=True
+        )
+        for line in result.stdout.strip().split("\n"):
+            line = line.strip()
+            if not line: continue
+            parts = line.split()
+            if len(parts) >= 4:
+                job_id = parts[0]
+                exp_name = parts[1]
+                state = parts[2]
+                time_str = parts[3]
+                node = parts[4] if len(parts) > 4 else ""
+                states[exp_name] = {"job_id": job_id, "state": state, "time": time_str, "node": node}
+        return states
+    except Exception as e:
+        print(f"Error calling squeue for telemetry: {e}")
+        return states
+
+def generate_telemetry():
+    configs = load_configs()
+    cluster_states = get_cluster_states()
+    telemetry = {}
+    
+    for exp_name, exp_data in configs.items():
+        if not isinstance(exp_data, dict): continue
+        target_epochs = exp_data.get('target', 500)
+        
+        job_info = cluster_states.get(exp_name, {})
+        dataset_repo = exp_data.get('dataset_repo_id', '')
+        current_epochs, step_val = get_epochs_for_run(exp_name, dataset_repo)
+        
+        telemetry[exp_name] = {
+            "slurm_state": job_info.get("state", "NONE"),
+            "slurm_time": job_info.get("time", ""),
+            "slurm_node": job_info.get("node", ""),
+            "epochs": round(current_epochs, 2) if current_epochs else 0,
+            "target": target_epochs
+        }
+        
+    with open("status.json", "w") as f:
+        json.dump(telemetry, f, indent=2)
+
 
 def create_and_submit_sbatch(exp_name, config_data, resume=False):
     """Creates an sbatch script and submits it, returning the newly assigned job ID."""
@@ -209,13 +257,35 @@ umask 0002
         eps_str = f"--dataset.episodes={config_data['episodes']}" if config_data.get('episodes') else ""
         extra_args_str = " ".join(config_data.get('extra_args', []))
         
+        target_epochs = config_data.get('target', 500)
+        target_steps_str = "1000000"
+        
+        try:
+            train_cfg_path = os.path.join(output_dir, "checkpoints", "last", "pretrained_model", "train_config.json")
+            with open(train_cfg_path) as f:
+                cfg = json.load(f)
+            batch_size = cfg.get("batch_size")
+            
+            repo_path = config_data['dataset_repo_id']
+            if not os.path.isabs(repo_path):
+                repo_path = os.path.expanduser(f"~/.cache/huggingface/lerobot/{repo_path}")
+            info_path = os.path.join(repo_path, "meta", "info.json")
+            with open(info_path) as f:
+                info = json.load(f)
+            total_frames = info.get("total_frames")
+            
+            if batch_size and total_frames:
+                target_steps_str = str(int((target_epochs * total_frames) / batch_size))
+        except Exception as e:
+            print(f"[{exp_name}] Warning: Could not calculate precise steps: {e}")
+            
         script_content += f"""python /projects/standard/ztchen/shared/yilong/lerobot_trossen/lerobot/scripts/train.py \\
     --resume=true \\
     --config_path={output_dir}/checkpoints/last/pretrained_model \\
     --dataset.repo_id {config_data['dataset_repo_id']} \\
     --output_dir {output_dir} \\
     --save_freq 2000 \\
-    --steps 1000000 \\
+    --steps {target_steps_str} \\
     {eps_str} \\
     {extra_args_str}
 """
@@ -441,6 +511,9 @@ def orchestrate():
 
     if updated:
         save_configs(configs)
+        
+    # Generate telemetry after routine check
+    generate_telemetry()
 
 if __name__ == "__main__":
     print("Starting Orchestrator at", time.strftime('%Y-%m-%d %H:%M:%S'))
