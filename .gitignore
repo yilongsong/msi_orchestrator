@@ -1,0 +1,10 @@
+# Ignore Python pycache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore Orchestrator Generation logs and temporary configs
+logs/
+sbatch_scripts/
+*.err
+*.out
