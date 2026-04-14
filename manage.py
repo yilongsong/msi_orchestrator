@@ -23,6 +23,23 @@ def telemetry_worker():
                 telemetry_data = json.load(f)
         except Exception:
             pass
+            
+        try:
+            import getpass
+            import subprocess
+            user = getpass.getuser()
+            res = subprocess.run(["squeue", "-u", user, "-n", "orchestrator", "-h", "-o", "%T %M %N"], capture_output=True, text=True)
+            out = res.stdout.strip()
+            if out:
+                parts = out.split()
+                st = parts[0]
+                tm = parts[1] if len(parts) > 1 else ""
+                nd = parts[2] if len(parts) > 2 else ""
+                telemetry_data['_ORCHESTRATOR'] = f"{st} [{tm}] on {nd}"
+            else:
+                telemetry_data['_ORCHESTRATOR'] = "INACTIVE"
+        except Exception:
+            telemetry_data['_ORCHESTRATOR'] = "ERROR"
         
         # Sleep for 5 seconds roughly, but break early if app_running flips
         for _ in range(50):
@@ -91,15 +108,28 @@ def main(stdscr):
 
         # Header graphics
         header = " EXPERIMENT MANAGER TUI ".center(w, "=")
+        orc_status = telemetry_data.get('_ORCHESTRATOR', 'FETCHING...')
+        header_sub = f" Orchestrator Daemon: {orc_status} ".center(w, " ")
+        
         stdscr.attron(curses.A_BOLD)
         stdscr.addstr(0, 0, header[:w])
+        
+        if "RUNNING" in orc_status:
+            stdscr.attron(curses.color_pair(2))
+        elif "PENDING" in orc_status:
+            stdscr.attron(curses.color_pair(3))
+        else:
+            stdscr.attron(curses.color_pair(4))
+        stdscr.addstr(1, 0, header_sub[:w])
+        stdscr.attroff(curses.color_pair(2) | curses.color_pair(3) | curses.color_pair(4))
+        
         stdscr.attroff(curses.A_BOLD)
         
         info = " [UP/DOWN] Nav | [SPACE] State | [+/-] Target | [W/S] Move | [P] Pause | [N] Rstrt | [ENTER] Save "
-        stdscr.addstr(1, 0, info.center(w)[:w])
-        stdscr.addstr(2, 0, "-" * w)
+        stdscr.addstr(2, 0, info.center(w)[:w])
+        stdscr.addstr(3, 0, "-" * w)
 
-        max_display = h - 5
+        max_display = h - 6
         
         # Smooth camera tracking / pagination
         if selected_idx < top_line:

@@ -90,7 +90,48 @@ def check_if_reached_1m(job_id, exp_name):
         pass
     return False
 
-def get_epochs_for_run(exp_name, dataset_repo):
+def get_total_frames(repo_path, episodes_str=None):
+    if not os.path.isabs(repo_path):
+        repo_path = os.path.expanduser(f"~/.cache/huggingface/lerobot/{repo_path}")
+        
+    info_path = os.path.join(repo_path, "meta", "info.json")
+    if not os.path.exists(info_path):
+        return None
+        
+    try:
+        if not episodes_str:
+            with open(info_path) as f:
+                info = json.load(f)
+            return info.get("total_frames")
+            
+        import ast
+        try:
+            episodes_list = ast.literal_eval(episodes_str)
+        except Exception:
+            with open(info_path) as f:
+                info = json.load(f)
+            return info.get("total_frames")
+            
+        episodes_path = os.path.join(repo_path, "meta", "episodes.jsonl")
+        if not os.path.exists(episodes_path):
+            with open(info_path) as f:
+                info = json.load(f)
+            return info.get("total_frames")
+            
+        total = 0
+        with open(episodes_path, "r") as f:
+            for line in f:
+                line = line.strip()
+                if not line: continue
+                ep_data = json.loads(line)
+                if ep_data.get("episode_index") in episodes_list:
+                    total += ep_data.get("length", 0)
+        return total if total > 0 else None
+    except Exception as e:
+        print(f"Error calculating frames: {e}")
+        return None
+
+def get_epochs_for_run(exp_name, dataset_repo, episodes_str=None):
     output_dir = f"/projects/standard/ztchen/shared/yilong/outputs/{exp_name}"
     checkpoints_dir = os.path.join(output_dir, "checkpoints")
     
@@ -122,20 +163,8 @@ def get_epochs_for_run(exp_name, dataset_repo):
     except Exception:
         return 0.0, highest_step
         
-    repo_path = dataset_repo
-    if not os.path.isabs(repo_path):
-        repo_path = os.path.expanduser(f"~/.cache/huggingface/lerobot/{dataset_repo}")
-    info_path = os.path.join(repo_path, "meta", "info.json")
-    
-    if not os.path.exists(info_path):
-        return 0.0, highest_step
-        
-    try:
-        with open(info_path) as f:
-            info = json.load(f)
-        total_frames = info.get("total_frames")
-        if not total_frames: return 0.0, highest_step
-    except Exception:
+    total_frames = get_total_frames(dataset_repo, episodes_str)
+    if not total_frames: 
         return 0.0, highest_step
         
     return (highest_step * batch_size) / total_frames, highest_step
@@ -175,7 +204,8 @@ def generate_telemetry():
         
         job_info = cluster_states.get(exp_name, {})
         dataset_repo = exp_data.get('dataset_repo_id', '')
-        current_epochs, step_val = get_epochs_for_run(exp_name, dataset_repo)
+        episodes_str = exp_data.get('episodes')
+        current_epochs, step_val = get_epochs_for_run(exp_name, dataset_repo, episodes_str)
         
         telemetry[exp_name] = {
             "slurm_state": job_info.get("state", "NONE"),
@@ -194,7 +224,7 @@ def create_and_submit_sbatch(exp_name, config_data, resume=False):
     os.makedirs(SBATCH_DIR, exist_ok=True)
     
     date_str = datetime.now().strftime("%Y-%m-%d")
-    current_logs_dir = os.path.join(LOGS_DIR, date_str)
+    current_logs_dir = os.path.join(LOGS_DIR, f"{date_str}_{USER}")
     os.makedirs(current_logs_dir, exist_ok=True)
     
     sbatch_file = os.path.join(SBATCH_DIR, f"{exp_name}.sbatch")
@@ -267,12 +297,8 @@ umask 0002
             batch_size = cfg.get("batch_size")
             
             repo_path = config_data['dataset_repo_id']
-            if not os.path.isabs(repo_path):
-                repo_path = os.path.expanduser(f"~/.cache/huggingface/lerobot/{repo_path}")
-            info_path = os.path.join(repo_path, "meta", "info.json")
-            with open(info_path) as f:
-                info = json.load(f)
-            total_frames = info.get("total_frames")
+            episodes_str = config_data.get('episodes')
+            total_frames = get_total_frames(repo_path, episodes_str)
             
             if batch_size and total_frames:
                 target_steps_str = str(int((target_epochs * total_frames) / batch_size))
@@ -371,7 +397,8 @@ def orchestrate():
             continue
             
         dataset_repo = exp_data.get('dataset_repo_id', '')
-        current_epochs, step_val = get_epochs_for_run(exp_name, dataset_repo)
+        episodes_str = exp_data.get('episodes')
+        current_epochs, step_val = get_epochs_for_run(exp_name, dataset_repo, episodes_str)
         target_epochs = exp_data.get('target', 500)
             
         last_job_id = exp_data.get('job_id')
