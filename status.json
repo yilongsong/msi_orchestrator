@@ -1,23 +1,23 @@
 {
   "pour_e15": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:29:41",
+    "slurm_time": "21:45:07",
     "slurm_node": "aga10",
-    "epochs": 350.45,
+    "epochs": 368.89,
     "target": 1000
   },
   "pour_e30": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:29:41",
+    "slurm_time": "21:45:07",
     "slurm_node": "aga12",
-    "epochs": 459.07,
+    "epochs": 487.76,
     "target": 1000
   },
   "pour_e50": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:29:41",
+    "slurm_time": "21:45:07",
     "slurm_node": "aga12",
-    "epochs": 319.71,
+    "epochs": 336.1,
     "target": 1000
   },
   "pour_e70": {
@@ -29,9 +29,9 @@
   },
   "pour_e100": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:38:14",
+    "slurm_time": "21:53:40",
     "slurm_node": "aga14",
-    "epochs": 592.28,
+    "epochs": 618.92,
     "target": 1500
   },
   "pour_c15_k1": {
@@ -57,9 +57,9 @@
   },
   "pour_c45_k1": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:44:42",
+    "slurm_time": "22:00:08",
     "slurm_node": "aga32",
-    "epochs": 835.0,
+    "epochs": 900.49,
     "target": 1000
   },
   "pour_c15_k2": {
@@ -77,94 +77,122 @@
     "target": 500
   },
   "pour_c20_k2": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 549.3,
+    "slurm_state": "RUNNING",
+    "slurm_time": "1:00:49",
+    "slurm_node": "aga22",
+    "epochs": 561.51,
     "target": 1000
   },
   "pour_c20_k5": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 522.11,
+    "slurm_state": "RUNNING",
+    "slurm_time": "57:48",
+    "slurm_node": "aga21",
+    "epochs": 533.98,
     "target": 1000
   },
   "pour_c30_k2": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 488.02,
+    "slurm_state": "RUNNING",
+    "slurm_time": "48:40",
+    "slurm_node": "aga26",
+    "epochs": 496.16,
     "target": 1000
   },
   "pour_c30_k5": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
+    "slurm_state": "RUNNING",
+    "slurm_time": "39:32",
+    "slurm_node": "aga02",
     "epochs": 458.61,
     "target": 1000
   },
   "pour_c45_k2": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
+    "slurm_state": "RUNNING",
+    "slurm_time": "27:31",
+    "slurm_node": "aga29",
     "epochs": 291.89,
     "target": 1000
   },
   "pour_c45_k5": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
+    "slurm_state": "RUNNING",
+    "slurm_time": "24:29",
+    "slurm_node": "aga29",
     "epochs": 299.56,
     "target": 1000
   },
   "sorting_e50": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:42:33",
+    "slurm_time": "21:57:59",
     "slurm_node": "aga06",
-    "epochs": 622.31,
+    "epochs": 658.72,
     "target": 1500
   },
   "sorting_e25": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:40:24",
+    "slurm_time": "21:55:50",
     "slurm_node": "aga14",
-    "epochs": 1054.64,
+    "epochs": 1140.33,
     "target": 1500
   },
   "insertion_e100": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:05:15",
+    "slurm_time": "21:20:41",
     "slurm_node": "aga06",
-    "epochs": 455.69,
+    "epochs": 510.78,
     "target": 1500
   },
   "insertion_e150": {
     "slurm_state": "RUNNING",
-    "slurm_time": "13:54:05",
+    "slurm_time": "19:09:31",
     "slurm_node": "aga02",
-    "epochs": 282.36,
+    "epochs": 320.23,
     "target": 1500
   },
   "insertion_e200": {
     "slurm_state": "RUNNING",
-    "slurm_time": "11:30:50",
+    "slurm_time": "16:46:16",
     "slurm_node": "aga40",
-    "epochs": 161.72,
+    "epochs": 180.27,
     "target": 1500
   },
   "insertion_e250": {
     "slurm_state": "RUNNING",
-    "slurm_time": "10:19:57",
+    "slurm_time": "15:35:23",
     "slurm_node": "aga02",
-    "epochs": 152.46,
+    "epochs": 175.76,
     "target": 1500
   },
   "insertion_e300": {
     "slurm_state": "RUNNING",
-    "slurm_time": "16:38:14",
+    "slurm_time": "21:53:40",
     "slurm_node": "aga29",
-    "epochs": 774.44,
+    "epochs": 794.21,
+    "target": 1500
+  },
+  "insertion_c20_k1": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1793.46,
+    "target": 1500
+  },
+  "insertion_c20_k2": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 0,
+    "target": 1500
+  },
+  "insertion_c20_k5": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 0,
+    "target": 1500
+  },
+  "insertion_c20_k10": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1250.06,
     "target": 1500
   }
 }

@@ -251,6 +251,46 @@
     "target": 1500
   },
   "_COMMENT_INSERTION_C": "--- insertion_c series ---",
+  "insertion_c20_k1": {
+    "owner": "song0837",
+    "status": "active",
+    "dataset_repo_id": "/projects/standard/ztchen/shared/yilong/datasets/insertion_c20_k1",
+    "episodes": null,
+    "policy_type": "crowd_diffusion",
+    "extra_args": [],
+    "job_id": null,
+    "target": 3000
+  },
+  "insertion_c20_k2": {
+    "owner": "song0837",
+    "status": "active",
+    "dataset_repo_id": "/projects/standard/ztchen/shared/yilong/datasets/insertion_c20_k2",
+    "episodes": null,
+    "policy_type": "crowd_diffusion",
+    "extra_args": [],
+    "job_id": null,
+    "target": 3000
+  },
+  "insertion_c20_k5": {
+    "owner": "song0837",
+    "status": "active",
+    "dataset_repo_id": "/projects/standard/ztchen/shared/yilong/datasets/insertion_c20_k5",
+    "episodes": null,
+    "policy_type": "crowd_diffusion",
+    "extra_args": [],
+    "job_id": null,
+    "target": 3000
+  },
+  "insertion_c20_k10": {
+    "owner": "song0837",
+    "status": "active",
+    "dataset_repo_id": "/projects/standard/ztchen/shared/yilong/datasets/insertion_c20_k10",
+    "episodes": null,
+    "policy_type": "crowd_diffusion",
+    "extra_args": [],
+    "job_id": null,
+    "target": 3000
+  },
   "_COMMENT_INSERTION_CE": "--- insertion_c_e series ---",
   "_COMMENT_SWITCHES": "================ SWITCHES TASKS ================",
   "_COMMENT_SWITCHES_E": "--- switches_e series ---",
