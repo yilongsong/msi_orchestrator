@@ -10,6 +10,7 @@
 #SBATCH --error=logs/%j_orchestrator.err
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=song0837@umn.edu
+#SBATCH --signal=B:USR1@600
 
 # No GPU is requested here! This is a pure CPU node.
 
