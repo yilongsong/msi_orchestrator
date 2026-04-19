@@ -1,23 +1,23 @@
 {
   "pour_e15": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 479.56,
+    "slurm_state": "RUNNING",
+    "slurm_time": "18:45:00",
+    "slurm_node": "aga08",
+    "epochs": 627.12,
     "target": 1000
   },
   "pour_e30": {
     "slurm_state": "RUNNING",
-    "slurm_time": "13:52:23",
-    "slurm_node": "aga29",
-    "epochs": 563.59,
+    "slurm_time": "14:38:15",
+    "slurm_node": "aga40",
+    "epochs": 766.48,
     "target": 1000
   },
   "pour_e50": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "13:45:06",
-    "slurm_node": "aga14",
-    "epochs": 385.29,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 465.22,
     "target": 1000
   },
   "pour_e70": {
@@ -28,10 +28,10 @@
     "target": 1000
   },
   "pour_e100": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "13:23:19",
-    "slurm_node": "aga32",
-    "epochs": 659.91,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 733.69,
     "target": 1500
   },
   "pour_c15_k1": {
@@ -77,94 +77,94 @@
     "target": 500
   },
   "pour_c20_k2": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "2:26:22",
-    "slurm_node": "aga27",
-    "epochs": 988.75,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1000.0,
     "target": 1000
   },
   "pour_c20_k5": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "2:22:55",
-    "slurm_node": "aga05",
-    "epochs": 949.29,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 999.99,
     "target": 1000
   },
   "pour_c30_k2": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "21:44",
-    "slurm_node": "aga22",
-    "epochs": 862.17,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1000.0,
     "target": 1000
   },
   "pour_c30_k5": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "9:38",
-    "slurm_node": "aga22",
-    "epochs": 695.82,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1000.0,
     "target": 1000
   },
   "pour_c45_k2": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 535.14,
+    "slurm_state": "RUNNING",
+    "slurm_time": "19:53:56",
+    "slurm_node": "aga08",
+    "epochs": 897.3,
     "target": 1000
   },
   "pour_c45_k5": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 551.81,
+    "slurm_state": "RUNNING",
+    "slurm_time": "18:47:02",
+    "slurm_node": "aga32",
+    "epochs": 830.35,
     "target": 1000
   },
   "sorting_e50": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "12:16:44",
-    "slurm_node": "aga32",
-    "epochs": 714.99,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 830.85,
     "target": 1500
   },
   "sorting_e25": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "11:00:56",
-    "slurm_node": "aga15",
-    "epochs": 1285.34,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 1500.0,
     "target": 1500
   },
   "insertion_e100": {
     "slurm_state": "RUNNING",
-    "slurm_time": "10:43:47",
-    "slurm_node": "aga22",
-    "epochs": 600.92,
+    "slurm_time": "22:32:28",
+    "slurm_node": "aga27",
+    "epochs": 781.19,
     "target": 1500
   },
   "insertion_e150": {
     "slurm_state": "RUNNING",
-    "slurm_time": "9:26:38",
-    "slurm_node": "aga29",
-    "epochs": 392.54,
+    "slurm_time": "20:26:50",
+    "slurm_node": "aga37",
+    "epochs": 544.05,
     "target": 1500
   },
   "insertion_e200": {
     "slurm_state": "RUNNING",
-    "slurm_time": "8:25:20",
-    "slurm_node": "aga26",
-    "epochs": 238.6,
+    "slurm_time": "20:23:03",
+    "slurm_node": "aga37",
+    "epochs": 376.45,
     "target": 1500
   },
   "insertion_e250": {
     "slurm_state": "RUNNING",
-    "slurm_time": "6:21:44",
-    "slurm_node": "aga21",
-    "epochs": 232.93,
+    "slurm_time": "20:20:57",
+    "slurm_node": "aga37",
+    "epochs": 345.16,
     "target": 1500
   },
   "insertion_e300": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "9:40:38",
-    "slurm_node": "aga04",
-    "epochs": 860.69,
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 941.55,
     "target": 1500
   },
   "insertion_c20_k1": {
@@ -175,38 +175,66 @@
     "target": 3000
   },
   "insertion_c20_k2": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
+    "slurm_state": "NONE",
+    "slurm_time": "",
     "slurm_node": "",
-    "epochs": 1275.1,
+    "epochs": 2999.99,
     "target": 3000
   },
   "insertion_c20_k5": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
+    "slurm_state": "NONE",
+    "slurm_time": "",
     "slurm_node": "",
-    "epochs": 937.04,
+    "epochs": 2999.99,
     "target": 3000
   },
   "insertion_c20_k10": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 2999.99,
+    "target": 3000
+  },
+  "insertion_c60_k1": {
     "slurm_state": "PENDING",
     "slurm_time": "0:00",
     "slurm_node": "",
-    "epochs": 2093.12,
+    "epochs": 0,
+    "target": 3000
+  },
+  "insertion_c60_k2": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 0,
+    "target": 3000
+  },
+  "insertion_c60_k5": {
+    "slurm_state": "NONE",
+    "slurm_time": "",
+    "slurm_node": "",
+    "epochs": 0,
+    "target": 3000
+  },
+  "insertion_c60_k10": {
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 0,
     "target": 3000
   },
   "switches_e50": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 0,
+    "slurm_state": "RUNNING",
+    "slurm_time": "16:16:38",
+    "slurm_node": "aga10",
+    "epochs": 187.2,
     "target": 2000
   },
   "switches_c20_k1": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 0,
+    "slurm_state": "RUNNING",
+    "slurm_time": "18:17:44",
+    "slurm_node": "aga32",
+    "epochs": 373.34,
     "target": 2000
   },
   "switches_c20_k2": {
@@ -224,10 +252,10 @@
     "target": 2000
   },
   "switches_c20_k10": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 0,
+    "slurm_state": "RUNNING",
+    "slurm_time": "16:16:38",
+    "slurm_node": "aga10",
+    "epochs": 307.3,
     "target": 2000
   }
 }
