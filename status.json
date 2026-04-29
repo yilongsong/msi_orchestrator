@@ -133,8 +133,8 @@
     "target": 1500
   },
   "sorting_e100": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
+    "slurm_state": "NONE",
+    "slurm_time": "",
     "slurm_node": "",
     "epochs": 0,
     "target": 1500
@@ -189,38 +189,38 @@
     "target": 2000
   },
   "sorting_c40_k10": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 429.93,
+    "slurm_state": "RUNNING",
+    "slurm_time": "3:45:19",
+    "slurm_node": "aga11",
+    "epochs": 443.16,
     "target": 2000
   },
   "insertion_e100": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "21:11:01",
-    "slurm_node": "aga29",
-    "epochs": 1031.57,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 1046.59,
     "target": 1500
   },
   "insertion_e150": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "17:11:33",
-    "slurm_node": "aga27",
-    "epochs": 750.65,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 771.31,
     "target": 1500
   },
   "insertion_e200": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "15:35:47",
-    "slurm_node": "aga27",
-    "epochs": 493.1,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 516.96,
     "target": 1500
   },
   "insertion_e250": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "15:26:41",
-    "slurm_node": "aga08",
-    "epochs": 455.27,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 474.33,
     "target": 1500
   },
   "insertion_e300": {
@@ -343,10 +343,10 @@
     "target": 3000
   },
   "insertion_c60_k1": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "15:23:24",
-    "slurm_node": "aga37",
-    "epochs": 764.15,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 946.63,
     "target": 3000
   },
   "insertion_c60_k2": {
@@ -364,10 +364,10 @@
     "target": 3000
   },
   "insertion_c60_k10": {
-    "slurm_state": "RUNNING",
-    "slurm_time": "15:11:35",
-    "slurm_node": "aga02",
-    "epochs": 460.47,
+    "slurm_state": "PENDING",
+    "slurm_time": "0:00",
+    "slurm_node": "",
+    "epochs": 575.59,
     "target": 3000
   },
   "switches_e50": {
@@ -381,7 +381,7 @@
     "slurm_state": "PENDING",
     "slurm_time": "0:00",
     "slurm_node": "",
-    "epochs": 0,
+    "epochs": 33.47,
     "target": 2000
   },
   "switches_c20_k1": {
@@ -413,10 +413,10 @@
     "target": 2000
   },
   "switches_c50_k1": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 111.15,
+    "slurm_state": "RUNNING",
+    "slurm_time": "3:49:02",
+    "slurm_node": "aga11",
+    "epochs": 122.27,
     "target": 2000
   },
   "switches_c50_k2": {
@@ -434,10 +434,10 @@
     "target": 2000
   },
   "switches_c50_k10": {
-    "slurm_state": "PENDING",
-    "slurm_time": "0:00",
-    "slurm_node": "",
-    "epochs": 66.86,
+    "slurm_state": "RUNNING",
+    "slurm_time": "3:38:56",
+    "slurm_node": "aga11",
+    "epochs": 77.55,
     "target": 2000
   }
 }
